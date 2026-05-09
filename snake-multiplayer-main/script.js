@@ -771,22 +771,4 @@ function renderLoop() {
 }
 renderLoop();
 
-// 优化后的移动逻辑
-function changeDirection(event) {
-    const LEFT_KEY = 37;
-    const RIGHT_KEY = 39;
-    const UP_KEY = 38;
-    const DOWN_KEY = 40;
 
-    const keyPressed = event.keyCode;
-    const goingUp = dy === -10;
-    const goingDown = dy === 10;
-    const goingRight = dx === 10;
-    const goingLeft = dx === -10;
-
-    // 防止蛇直接向后转（自杀逻辑优化）
-    if (keyPressed === LEFT_KEY && !goingRight) { dx = -10; dy = 0; }
-    if (keyPressed === UP_KEY && !goingDown) { dx = 0; dy = -10; }
-    if (keyPressed === RIGHT_KEY && !goingLeft) { dx = 10; dy = 0; }
-    if (keyPressed === DOWN_KEY && !goingUp) { dx = 0; dy = 10; }
-}
