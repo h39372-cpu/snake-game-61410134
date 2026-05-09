@@ -517,7 +517,55 @@ setInterval(() => {
 
     io.emit('gameState', { players, apples, specialApple, goldApple, shrinkApple, speedApple, poisonApple, magnetApple, bombApple, mines, blackHoles });
 
-}, 60);
+}, 60);// 定義遊戲設定
+const OBSTACLES = [
+    {x: 200, y: 200}, {x: 220, y: 200}, {x: 240, y: 200}, // 牆壁座標
+    {x: 600, y: 400}, {x: 600, y: 420}, {x: 600, y: 440}
+];
+
+// 修改食物生成函式
+function generateFood() {
+    const r = Math.random();
+    let type = 'NORMAL';
+    if (r < 0.1) type = 'GOLDEN';   // 10% 機率金蘋果
+    else if (r < 0.2) type = 'SHRINK'; // 10% 機率縮小藥水
+
+    return {
+        x: Math.floor(Math.random() * (canvasWidth / gridSize)) * gridSize,
+        y: Math.floor(Math.random() * (canvasHeight / gridSize)) * gridSize,
+        type: type,
+        spawnTime: Date.now()
+    };
+}
+
+// 在遊戲循環中檢查碰撞
+function update() {
+    for (let id in players) {
+        let player = players[id];
+        
+        // 檢查是否撞到障礙物
+        if (OBSTACLES.some(ob => ob.x === player.x && ob.y === player.y)) {
+            killPlayer(id);
+            io.to(id).emit('effect', 'hit'); // 通知客戶端震動/音效
+            continue;
+        }
+
+        // 檢查吃到哪種食物
+        if (player.x === food.x && player.y === food.y) {
+            if (food.type === 'GOLDEN') {
+                player.score += 50; 
+                io.to(id).emit('effect', 'gold');
+            } else if (food.type === 'SHRINK') {
+                if (player.body.length > 2) player.body.pop(); // 變短
+                io.to(id).emit('effect', 'shrink');
+            } else {
+                player.score += 10;
+                io.to(id).emit('effect', 'eat');
+            }
+            food = generateFood(); // 重新生成
+        }
+    }
+}
 
 const PORT = process.env.PORT || 3000;
 http.listen(PORT, () => {
