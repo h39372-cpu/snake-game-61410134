@@ -4,7 +4,7 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node serivers.js"
   },
   "keywords": [],
   "author": "",
