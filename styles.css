@@ -1,0 +1,568 @@
+/* ==================== 全局樣式 ==================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    color: #fff;
+    overflow-x: hidden;
+}
+
+/* ==================== 容器 ==================== */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==================== 頁面標題 ==================== */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    animation: slideDown 0.6s ease-out;
+}
+
+.header h1 {
+    font-size: 3rem;
+    background: linear-gradient(45deg, #4CAF50, #66BB6A);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px rgba(76, 175, 80, 0.3);
+}
+
+.header .subtitle {
+    font-size: 1.2rem;
+    color: #aaa;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+/* ==================== 遊戲區域 ==================== */
+.game-section {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ==================== 控制面板 ==================== */
+.control-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.stat-item {
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: rgba(76, 175, 80, 0.2);
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.9rem;
+    color: #aaa;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #4CAF50;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.difficulty-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(76, 175, 80, 0.1);
+    border: 1px solid rgba(76, 175, 80, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.difficulty-selector label {
+    font-weight: 600;
+    white-space: nowrap;
+    color: #4CAF50;
+}
+
+.difficulty-selector select {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    border: 1px solid rgba(76, 175, 80, 0.5);
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.difficulty-selector select:hover {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(76, 175, 80, 0.8);
+}
+
+.difficulty-selector select:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.difficulty-selector select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ==================== 畫布容器 ==================== */
+.canvas-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    aspect-ratio: 1;
+}
+
+#gameCanvas {
+    width: 100%;
+    height: 100%;
+    background: #000;
+    border: 3px solid #4CAF50;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.5), inset 0 0 20px rgba(76, 175, 80, 0.1);
+    display: block;
+    cursor: pointer;
+}
+
+/* ==================== 遊戲覆蓋層 ==================== */
+.game-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    backdrop-filter: blur(5px);
+    transition: opacity 0.3s ease;
+}
+
+.game-overlay.hidden {
+    display: none;
+}
+
+.overlay-content {
+    text-align: center;
+    animation: scaleIn 0.3s ease-out;
+}
+
+.overlay-content h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #4CAF50;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.overlay-content p {
+    font-size: 1rem;
+    color: #aaa;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+/* ==================== 按鈕樣式 ==================== */
+.button-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 30px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #4CAF50, #66BB6A);
+    color: #000;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border: 2px solid #4CAF50;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: rgba(76, 175, 80, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+}
+
+.btn-secondary:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ==================== 說明部分 ==================== */
+.instructions {
+    background: rgba(76, 175, 80, 0.05);
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.instructions h3 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.control-hints {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.hint {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hint .key {
+    background: rgba(76, 175, 80, 0.2);
+    border: 1px solid rgba(76, 175, 80, 0.5);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #4CAF50;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.hint .description {
+    font-size: 0.9rem;
+    color: #aaa;
+    text-align: center;
+}
+
+/* ==================== 規則部分 ==================== */
+.rules {
+    background: rgba(76, 175, 80, 0.05);
+    border: 1px solid rgba(76, 175, 80, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.rules h3 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+.rules ul {
+    list-style: none;
+    display: grid;
+    gap: 12px;
+}
+
+.rules li {
+    padding-left: 25px;
+    position: relative;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.rules li:before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+/* ==================== 頁腳 ==================== */
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.footer a {
+    color: #4CAF50;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #66BB6A;
+    text-decoration: underline;
+}
+
+/* ==================== 動畫 ==================== */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ==================== 響應式設計 ==================== */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .game-section {
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .control-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .stat-item {
+        padding: 12px;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+
+    .stat-label {
+        font-size: 0.8rem;
+    }
+
+    .difficulty-selector {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .difficulty-selector select {
+        font-size: 0.9rem;
+    }
+
+    #gameCanvas {
+        border-width: 2px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .overlay-content h2 {
+        font-size: 1.4rem;
+    }
+
+    .overlay-content p {
+        font-size: 0.9rem;
+    }
+
+    .instructions h3,
+    .rules h3 {
+        font-size: 1.1rem;
+    }
+
+    .control-hints {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .rules li {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .header .subtitle {
+        font-size: 1rem;
+    }
+
+    .game-section {
+        padding: 15px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .stat-item {
+        padding: 10px;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .difficulty-selector {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .difficulty-selector select {
+        width: 100%;
+    }
+
+    .button-group {
+        gap: 10px;
+    }
+
+    .btn {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+
+    .control-hints {
+        grid-template-columns: 1fr;
+    }
+
+    .hint .key,
+    .hint .description {
+        font-size: 0.85rem;
+    }
+
+    .instructions,
+    .rules {
+        padding: 15px;
+    }
+
+    .rules li {
+        font-size: 0.9rem;
+        padding-left: 20px;
+    }
+
+    .footer {
+        margin-top: 20px;
+        font-size: 0.8rem;
+    }
+}
+
+/* ==================== 暗色模式支持 ==================== */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+    }
+}
+
+/* ==================== 高對比度模式 ==================== */
+@media (prefers-contrast: more) {
+    .stat-item,
+    .difficulty-selector {
+        border-width: 2px;
+    }
+
+    .btn {
+        font-weight: 700;
+    }
+}
+
+/* ==================== 減少動畫模式 ==================== */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
